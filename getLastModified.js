@@ -158,7 +158,8 @@ const countryMeta = {};
 let currentCountryPos = 0;
 
 const target = process.argv[2];
-const environment = process.argv[3] || "np";
+const outputDir = process.argv[3] || "nsx-metadata";
+const environment = process.argv[4] || "np";
 
 function ensureDirectoryExistence(filePath) {
   var dirname = path.dirname(filePath);
@@ -185,8 +186,8 @@ function downloadXML(currentCountry) {
     response.on("end", function () {
       const urlFile = url.split("/").pop();
       const targetSourceFile = path.resolve(
-        __dirname,
-        `../src/metadata/xmls/${target}/${environment}/${urlFile}`
+        outputDir,
+        `metadata/xmls/${target}/${environment}/${urlFile}`
       );
       ensureDirectoryExistence(targetSourceFile);
       fs.writeFileSync(targetSourceFile, body, "utf8");
@@ -196,11 +197,9 @@ function downloadXML(currentCountry) {
       downloadXML(countries[currentCountryPos++]);
     } else {
       const targetFile = path.resolve(
-        __dirname,
-        "../src/metadata/" + target.toLowerCase() + ".ts"
+        outputDir,
+        "metadata/" + target.toLowerCase() + ".ts"
       );
-
-      console.log("PEPE");
 
       fs.writeFileSync(
         targetFile,
